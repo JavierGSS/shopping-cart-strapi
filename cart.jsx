@@ -1,4 +1,4 @@
- // simulate getting products from DataBase
+// simulate getting products from DataBase
 const products = [
   { name: "Apples_:", country: "Italy", cost: 3, instock: 10 },
   { name: "Oranges:", country: "Spain", cost: 4, instock: 3 },
@@ -81,16 +81,8 @@ const Products = (props) => {
   const [items, setItems] = React.useState(products);
   const [cart, setCart] = React.useState([]);
   const [total, setTotal] = React.useState(0);
-  const {
-    Card,
-    Accordion,
-    Button,
-    Container,
-    Row,
-    Col,
-    Image,
-    Input,
-  } = ReactBootstrap;
+  const { Card, Accordion, Button, Container, Row, Col, Image, Input } =
+    ReactBootstrap;
 
   //  Fetch Data
   const { Fragment, useState, useEffect, useReducer } = React;
@@ -109,8 +101,8 @@ const Products = (props) => {
     console.log("name: ", name);
     let item = items.filter((item) => item.name == name);
     console.log(`add to Cart ${JSON.stringify(item)}`);
-    setCart([...cart, ...item]);
-    doFetch(query);
+    /*setCart([...cart, ...item]);
+    doFetch(query);*/
   };
 
   const deleteCartItem = (index) => {
@@ -127,7 +119,7 @@ const Products = (props) => {
         <Image src={url} width={70} roundedCircle></Image>
         <Button variant="primary" size="btn-sm">
           {item.name}:{item.cost}
-           --In stock: {item.instock}
+          --In stock: {item.instock}
         </Button>
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
@@ -178,11 +170,15 @@ const Products = (props) => {
   const restockProducts = (url) => {
     doFetch(url);
     let newItems = data.map((item) => {
-      let {name, country, cost, instock} = item;
-      return {name, country, cost, instock};
+      let { name, country, cost, instock } = item;
+      return {
+        name: item.attributes.name,
+        country: item.attributes.country,
+        cost: item.attributes.country,
+        instock: item.attributes.instock,
+      };
     });
-    setItems([...items, newItems]); 
-    
+    setItems([...items, newItems]);
   };
 
   /*
