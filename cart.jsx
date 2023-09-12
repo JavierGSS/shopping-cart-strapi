@@ -1,15 +1,15 @@
 // simulate getting products from DataBase
 const products = [
-  { name: "Apples_:", country: "Italy", cost: 3, instock: 10 },
+  { name: "Apples:", country: "Italy", cost: 3, instock: 10 },
   { name: "Oranges:", country: "Spain", cost: 4, instock: 3 },
-  { name: "Beans__:", country: "USA", cost: 2, instock: 5 },
+  { name: "Beans:", country: "USA", cost: 2, instock: 5 },
   { name: "Cabbage:", country: "USA", cost: 1, instock: 8 },
 ];
 //=========Cart=============
 const Cart = (props) => {
   const { Card, Accordion, Button } = ReactBootstrap;
   let data = props.location.data ? props.location.data : products;
-  console.log(`data: ${JSON.stringify(data)}`);
+  console.log(`data:${JSON.stringify(data)}`);
 
   return <Accordion defaultActiveKey="0">{list}</Accordion>;
 };
@@ -83,7 +83,6 @@ const Products = (props) => {
   const [total, setTotal] = React.useState(0);
   const { Card, Accordion, Button, Container, Row, Col, Image, Input } =
     ReactBootstrap;
-
   //  Fetch Data
   const { Fragment, useState, useEffect, useReducer } = React;
   const [query, setQuery] = useState("http://localhost:1337/api/products");
@@ -93,39 +92,48 @@ const Products = (props) => {
       data: [],
     }
   );
+
   console.log(`Rendering Products ${JSON.stringify(data)}`);
 
   // Fetch Data
   const addToCart = (e) => {
     let name = e.target.name;
-    console.log("name: ", name);
     let item = items.filter((item) => item.name == name);
     console.log(`add to Cart ${JSON.stringify(item)}`);
-    /*setCart([...cart, ...item]);
-    doFetch(query);*/
+    setCart([...cart, ...item]);
+    if (item[0].instock > 0) {
+      item[0].instock = item[0].instock - 1;
+    } else {
+      let newCart = cart.filter((item, index) => !item[0]);
+      setCart(newCart);
+    }
   };
 
   const deleteCartItem = (index) => {
     let newCart = cart.filter((item, i) => index != i);
     setCart(newCart);
+    console.log(cart);
   };
 
   let list = items.map((item, index) => {
-    let n = Math.floor(Math.random() * 5000) + 1049;
-    let url = "https://picsum.photos/seed/" + n + "/50/50";
+    let n = index + 500;
+    let picsum = "https://picsum.photos/" + n;
 
     return (
       <li key={index}>
-        <Image src={url} width={70} roundedCircle></Image>
-        <Button variant="primary" size="btn-sm">
-          {item.name}:{item.cost}
-          --In stock: {item.instock}
+        <Image src={picsum} width={70} roundedCircle></Image>
+        <br />
+        <Button variant="primary" size="large">
+          {item.name}
+          &nbsp; ${item.cost}
+          <br />
+          Instock: {item.instock}
         </Button>
+        <br />
         <input name={item.name} type="submit" onClick={addToCart}></input>
       </li>
     );
   });
-
   let cartList = cart.map((item, index) => {
     return (
       <Card key={index}>
@@ -139,7 +147,7 @@ const Products = (props) => {
           eventKey={1 + index}
         >
           <Card.Body>
-            $ {item.cost} from {item.country}
+            ${item.cost} from {item.country}
           </Card.Body>
         </Accordion.Collapse>
       </Card>
@@ -166,36 +174,18 @@ const Products = (props) => {
     return newTotal;
   };
 
-  // TODO: implement the restockProducts function
-  const restockProducts = (url) => {
-    doFetch(url);
-    let newItems = data.map((item) => {
-      let { name, country, cost, instock } = item;
+  const restockProducts = async (url) => {
+    const response = await axios.get(url);
+    const newSet = response.data.data.map((item) => {
       return {
         name: item.attributes.name,
         country: item.attributes.country,
-        cost: item.attributes.country,
+        cost: item.attributes.cost,
         instock: item.attributes.instock,
       };
     });
-    setItems([...items, newItems]);
+    setItems([...products, ...newSet]);
   };
-
-  /*
-    const restockProducts = async (url) => {
-    try {
-      const response = await axios.get(url);
-      const updatedProductsData = response.data.data; // Datos de productos actualizados desde la API
-      const updatedProducts = updatedProductsData.map((item) => {
-        // Mapea los datos para que coincidan con la estructura de tu objeto products
-        return {
-          name: item.attributes.name,
-          country: item.attributes.country,
-          cost: item.attributes.cost,
-          instock: item.attributes.instock,
-        };
-      });
-  */
 
   return (
     <Container>
@@ -217,7 +207,7 @@ const Products = (props) => {
       <Row>
         <form
           onSubmit={(event) => {
-            restockProducts(`http://localhost:1337/${query}`);
+            restockProducts(`${query}`);
             console.log(`Restock called on ${query}`);
             event.preventDefault();
           }}
