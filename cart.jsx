@@ -9,14 +9,6 @@ const products = [
   { name: "Tomatoes", country: "Mexico", cost: 2, instock: 12 },
   { name: "Coffee", country: "Brazil", cost: 10, instock: 5 },
 ];
-//=========Cart=============
-const Cart = (props) => {
-  const { Card, Accordion, Button } = ReactBootstrap;
-  let data = props.location.data ? props.location.data : products;
-  console.log(`data:${JSON.stringify(data)}`);
-
-  return <Accordion defaultActiveKey="0">{list}</Accordion>;
-};
 
 const useDataApi = (initialUrl, initialData) => {
   const { useState, useEffect, useReducer } = React;
