@@ -1,13 +1,13 @@
 // simulate getting products from DataBase
 const products = [
-  { name: "Apples:", country: "Italy", cost: 3, instock: 10 },
-  { name: "Oranges:", country: "Spain", cost: 4, instock: 3 },
-  { name: "Beans:", country: "USA", cost: 2, instock: 5 },
-  { name: "Cabbage:", country: "USA", cost: 1, instock: 8 },
-  { name: "Bananas:", country: "Colombia", cost: 4, instock: 5 },
-  { name: "Watermelon:", country: "Ghana", cost: 6, instock: 6 },
-  { name: "Tomatoes:", country: "Mexico", cost: 2, instock: 12 },
-  { name: "Coffee:", country: "Brazil", cost: 10, instock: 5 },
+  { name: "Apples", country: "Italy", cost: 3, instock: 10 },
+  { name: "Oranges", country: "Spain", cost: 4, instock: 3 },
+  { name: "Beans", country: "USA", cost: 2, instock: 5 },
+  { name: "Cabbage", country: "USA", cost: 1, instock: 8 },
+  { name: "Bananas", country: "Colombia", cost: 4, instock: 5 },
+  { name: "Watermelon", country: "Ghana", cost: 6, instock: 6 },
+  { name: "Tomatoes", country: "Mexico", cost: 2, instock: 12 },
+  { name: "Coffee", country: "Brazil", cost: 10, instock: 5 },
 ];
 //=========Cart=============
 const Cart = (props) => {
@@ -129,7 +129,7 @@ const Products = (props) => {
         <br />
         <Button variant="primary" size="large">
           {item.name}
-          &nbsp; ${item.cost}
+          :&nbsp;${item.cost}
           <br />
           Instock: {item.instock}
         </Button>
@@ -138,6 +138,7 @@ const Products = (props) => {
       </li>
     );
   });
+
   let cartList = cart.map((item, index) => {
     return (
       <Card key={index}>
